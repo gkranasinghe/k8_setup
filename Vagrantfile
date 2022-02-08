@@ -11,12 +11,31 @@ Vagrant.configure("2") do |config|
       
     config.vm.define "k8s-master" do |master|
         master.vm.box = IMAGE_NAME
-        master.vm.network "private_network", ip: "192.168.50.10"
+        master.vm.network "public_network", ip: "192.168.8.110" , bridge: "wlo1", use_dhcp_assigned_default_route: "true"
         master.vm.hostname = "k8s-master"
+
+
+
+        # default router
+        master.vm.provision "shell",
+            run: "always",
+            inline: "route add default gw 192.168.8.1"
+
+        # default router ipv6
+        master.vm.provision "shell",
+            run: "always",
+            inline: "route -A inet6 add default gw fc00::1 eth1"
+
+        # delete default gw on eth0
+        master.vm.provision "shell",
+            run: "always",
+            inline: "eval `route -n | awk '{ if ($8 ==\"eth0\" && $2 != \"0.0.0.0\") print \"route del default gw \" $2; }'`"
+
+
         master.vm.provision "ansible" do |ansible|
             ansible.playbook = "kubernetes-setup/master-playbook.yml"
             ansible.extra_vars = {
-                node_ip: "192.168.50.10",
+                node_ip: "192.168.8.110",
             }
         end
     end
@@ -24,13 +43,32 @@ Vagrant.configure("2") do |config|
     (1..N).each do |i|
         config.vm.define "node-#{i}" do |node|
             node.vm.box = IMAGE_NAME
-            node.vm.network "private_network", ip: "192.168.50.#{i + 10}"
+            node.vm.network "public_network", ip: "192.168.8.#{i + 110}" ,bridge: "wlo1", use_dhcp_assigned_default_route: "true"
             node.vm.hostname = "node-#{i}"
+
+
+
+            # default router
+            node.vm.provision "shell",
+                run: "always",
+                inline: "route add default gw 192.168.8.1"
+
+            # default router ipv6
+            node.vm.provision "shell",
+                run: "always",
+                inline: "route -A inet6 add default gw fc00::1 eth1"
+
+            # delete default gw on eth0
+            node.vm.provision "shell",
+                run: "always",
+                inline: "eval `route -n | awk '{ if ($8 ==\"eth0\" && $2 != \"0.0.0.0\") print \"route del default gw \" $2; }'`"
+
+
+
             node.vm.provision "ansible" do |ansible|
                 ansible.playbook = "kubernetes-setup/node-playbook.yml"
-                # ansible.become = true
                 ansible.extra_vars = {
-                    node_ip: "192.168.50.#{i + 10}",
+                    node_ip: "192.168.8.#{i + 110}",
                 }
             end
         end

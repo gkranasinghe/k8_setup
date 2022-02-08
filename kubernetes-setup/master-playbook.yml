@@ -25,6 +25,9 @@
   connection: ssh
 
   tasks:
+
+
+
      - name: Create containerd config file
        file:
          path: "/etc/modules-load.d/containerd.conf"
