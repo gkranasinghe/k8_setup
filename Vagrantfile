@@ -21,10 +21,10 @@ Vagrant.configure("2") do |config|
             run: "always",
             inline: "route add default gw 192.168.8.1"
 
-        # default router ipv6
-        master.vm.provision "shell",
-            run: "always",
-            inline: "route -A inet6 add default gw fc00::1 eth1"
+        # # default router ipv6
+        # master.vm.provision "shell",
+        #     run: "always",
+        #     inline: "route -A inet6 add default gw fc00::1 eth1"
 
         # delete default gw on eth0
         master.vm.provision "shell",
@@ -53,10 +53,10 @@ Vagrant.configure("2") do |config|
                 run: "always",
                 inline: "route add default gw 192.168.8.1"
 
-            # default router ipv6
-            node.vm.provision "shell",
-                run: "always",
-                inline: "route -A inet6 add default gw fc00::1 eth1"
+            # # default router ipv6
+            # node.vm.provision "shell",
+            #     run: "always",
+            #     inline: "route -A inet6 add default gw fc00::1 eth1"
 
             # delete default gw on eth0
             node.vm.provision "shell",
