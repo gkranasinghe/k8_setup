@@ -1,0 +1,44 @@
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: create the kube user account
+      user: name=kube append=yes state=present createhome=yes shell=/bin/bash
+
+    - name: allow 'kube' to use sudo without needing a password
+      lineinfile:
+        dest: /etc/sudoers
+        line: 'kube ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+
+    - name: set up authorized keys for the kube user
+      authorized_key: user=kube key="{{item}}"
+      with_file:
+        - ~/.ssh/id_rsa.pub
+
+- hosts: all
+  remote_user: ubuntu
+  become: yes
+  become_method: sudo
+  become_user: root
+  gather_facts: yes
+  connection: ssh
+
+  tasks:
+
+     - name: install nfs-server
+       shell: |
+               sudo apt-get update && sudo apt-get install -y nfs-server
+               sudo mkdir -p /data
+
+
+     - name: Add NFS access rights for k8 cluster nodes 
+       lineinfile:
+         path: "/etc/exports"
+         line: |
+               /data *(rw,no_subtree_check,no_root_squash)
+
+     - name: enable nfs-server
+       shell: |
+               sudo systemctl enable --now nfs-server
+               sudo exportfs -ar
