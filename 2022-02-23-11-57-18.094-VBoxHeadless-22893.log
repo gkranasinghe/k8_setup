@@ -1,0 +1,12 @@
+Log created: 2022-02-23T11:57:18.940338000Z
+Process ID:  22893 (0x596d)
+Parent PID:  2859 (0xb2b)
+Executable:  /usr/lib/virtualbox/VBoxHeadless
+Arg[0]: /usr/lib/virtualbox/VBoxHeadless
+Arg[1]: --comment
+Arg[2]: k8_setup_node-1_1645268309679_49896
+Arg[3]: --startvm
+Arg[4]: a0563127-f15e-4a95-86d7-b4cfde390b0a
+Arg[5]: --vrde
+Arg[6]: config
+AddRef: illegal refcnt=3221225469 state=2

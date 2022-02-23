@@ -1,0 +1,12 @@
+Log created: 2022-02-23T11:57:19.177479000Z
+Process ID:  11276 (0x2c0c)
+Parent PID:  2859 (0xb2b)
+Executable:  /usr/lib/virtualbox/VBoxHeadless
+Arg[0]: /usr/lib/virtualbox/VBoxHeadless
+Arg[1]: --comment
+Arg[2]: k8_setup_k8s-master_1645268053161_93597
+Arg[3]: --startvm
+Arg[4]: a8317f11-9ad2-44a6-9d7c-a4f8ef46fc0a
+Arg[5]: --vrde
+Arg[6]: config
+AddRef: illegal refcnt=3221225469 state=2
